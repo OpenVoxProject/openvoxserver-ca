@@ -38,6 +38,11 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+
+      - name: Display bundle environment
+        run: |
+          bundle env
+
       - run: bundle exec rake spec_random
 
   windows_unit_tests:
@@ -57,4 +62,9 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+
+      - name: Display bundle environment
+        run: |
+          bundle env
+
       - run: bundle exec rake spec_random
