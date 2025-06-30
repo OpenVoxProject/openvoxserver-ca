@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "puppetserver/ca/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "puppetserver-ca"
+  spec.name          = "openvoxserver-ca"
   spec.version       = Puppetserver::Ca::VERSION
-  spec.authors       = ["Puppet, Inc."]
-  spec.email         = ["release@puppet.com"]
+  spec.authors       = ["OpenVox Project"]
+  spec.email         = ["openvox@voxpupuli.org"]
   spec.license       = "Apache-2.0"
 
-  spec.summary       = %q{A simple CLI tool for interacting with Puppet Server's Certificate Authority}
-  spec.homepage      = "https://github.com/puppetlabs/puppetserver-ca-cli/"
+  spec.summary       = %q{A simple CLI tool for interacting with OpenVox Server's Certificate Authority}
+  spec.homepage      = "https://github.com/OpenVoxProject/openvoxserver-ca/"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "facter", [">= 2.0.1", "< 5"]
+  spec.add_runtime_dependency "openfact", [">= 5.0.0", "< 6"]
 
   spec.add_development_dependency "bundler", ">= 1.16"
   spec.add_development_dependency "rake", ">= 12.3.3"
