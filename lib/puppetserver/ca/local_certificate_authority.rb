@@ -252,6 +252,15 @@ module Puppetserver
         crl.next_update = valid_until
         crl.sign(key, @digest)
 
+        # FIXME: Workaround a bug in jruby-openssl. Without this, #to_pem return an invalid CRL:
+        # ----BEGIN X509 CRL-----
+        # MAA=
+        # -----END X509 CRL-----
+        # See:
+        # https://github.com/jruby/jruby-openssl/issues/163
+        # https://github.com/jruby/jruby-openssl/pull/333
+        crl = OpenSSL::X509::CRL.new(crl.to_der)
+
         crl
       end
 
