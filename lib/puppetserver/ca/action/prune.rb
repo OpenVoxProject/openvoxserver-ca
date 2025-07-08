@@ -136,12 +136,27 @@ BANNER
         end
 
         def update_pruned_CRL(crl, pkey)
-          number_ext, other_ext = crl.extensions.partition{ |ext| ext.oid == "crlNumber" }
-          number_ext.each do |crl_number|
-            updated_crl_number = OpenSSL::BN.new(crl_number.value) + OpenSSL::BN.new(1)
-            crl_number.value=(OpenSSL::ASN1::Integer(updated_crl_number))
+          # Updating extensions in-place does not work with some ruby versions / implementation. Copy & recreate them.
+          extensions = crl.extensions
+          crl.extensions = []
+
+          ef = OpenSSL::X509::ExtensionFactory.new
+          ef.crl = crl
+
+          extensions.each do |ext|
+            if ext.oid == "crlNumber"
+              if RUBY_ENGINE == "jruby"
+                # Creating a crlNumber extension without an ExtensionFactory produce incorrect result on jruby
+                crl.add_extension(ef.create_extension("crlNumber", ext.value.next))
+              else
+                # Creating a crlNumber extension with an ExtensionFactory rais on exception on MRI
+                crl.add_extension(OpenSSL::X509::Extension.new("crlNumber", ext.value.next))
+              end
+            else
+              crl.add_extension(ext)
+            end
           end
-          crl.extensions=(number_ext + other_ext)
+
           crl.sign(pkey, OpenSSL::Digest::SHA256.new)
         end
 

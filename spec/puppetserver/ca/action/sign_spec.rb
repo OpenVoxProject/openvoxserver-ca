@@ -65,9 +65,9 @@ RSpec.describe 'Puppetserver::Ca::SignAction' do
     let(:get_success)   { response.new('200', 'Stuff') }
     let(:not_found)     { response.new('404', 'Not Found') }
     let(:empty)         { response.new('404', '[]') }
-    let(:status_url)    { Puppetserver::Ca::Utils::HttpClient::URL.new('https','localhost','8140','status','v1','services') }
-    let(:bulk_sign_url) { Puppetserver::Ca::Utils::HttpClient::URL.new('https','localhost','8140','puppet-ca','v1','sign', nil, {}) }
-    let(:bulk_sign_all_url) { Puppetserver::Ca::Utils::HttpClient::URL.new('https','localhost','8140','puppet-ca','v1','sign','all', {}) }
+    let(:status_url)    { Puppetserver::Ca::Utils::HttpClient::URL.new('https','puppet','8140','status','v1','services') }
+    let(:bulk_sign_url) { Puppetserver::Ca::Utils::HttpClient::URL.new('https','puppet','8140','puppet-ca','v1','sign', nil, {}) }
+    let(:bulk_sign_all_url) { Puppetserver::Ca::Utils::HttpClient::URL.new('https','puppet','8140','puppet-ca','v1','sign','all', {}) }
     let(:status_old_server) { response.new('200', '{"ca":{"service_version":"7.4.1"}}') }
     let(:status_new_server) { response.new('200', '{"ca":{"service_version":"8.4.1"}}') }
     let(:connection) { double }

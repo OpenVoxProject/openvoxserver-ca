@@ -15,8 +15,8 @@ module Puppetserver
       # before the user expected it to when they asked for "one year".
       CERT_VALID_FROM = (Time.now - (60*60*24)).freeze
 
-      SSL_SERVER_CERT = "1.3.6.1.5.5.7.3.1"
-      SSL_CLIENT_CERT = "1.3.6.1.5.5.7.3.2"
+      SSL_SERVER_CERT = "serverAuth"
+      SSL_CLIENT_CERT = "clientAuth"
 
       CLI_AUTH_EXT_OID = "1.3.6.1.4.1.34380.1.3.39"
 
@@ -251,6 +251,15 @@ module Puppetserver
         crl.last_update = CERT_VALID_FROM
         crl.next_update = valid_until
         crl.sign(key, @digest)
+
+        # FIXME: Workaround a bug in jruby-openssl. Without this, #to_pem return an invalid CRL:
+        # ----BEGIN X509 CRL-----
+        # MAA=
+        # -----END X509 CRL-----
+        # See:
+        # https://github.com/jruby/jruby-openssl/issues/163
+        # https://github.com/jruby/jruby-openssl/pull/333
+        crl = OpenSSL::X509::CRL.new(crl.to_der)
 
         crl
       end
