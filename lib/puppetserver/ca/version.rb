@@ -1,5 +1,5 @@
 module Puppetserver
   module Ca
-    VERSION = "2.7.0"
+    VERSION = "3.0.0-rc1"
   end
 end
