@@ -5,6 +5,7 @@
 /doc/
 /pkg/
 /spec/reports/
+/vendor/
 /tmp/
 openvoxserver-ca-*.gem
 Gemfile.lock
