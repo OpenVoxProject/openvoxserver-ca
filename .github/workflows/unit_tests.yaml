@@ -43,3 +43,12 @@ jobs:
           bundle env
 
       - run: bundle exec rake spec_random
+
+  tests:
+    needs:
+      - matrix
+      - linux_unit_tests
+    runs-on: ubuntu-24.04
+    name: Test suite
+    steps:
+      - run: echo Test suite completed
