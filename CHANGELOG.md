@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0](https://github.com/openvoxproject/openvoxserver-ca/tree/3.0.0) (2025-07-10)
+
+[Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.0.0-rc1...3.0.0)
+
+**Merged pull requests:**
+
+- CI: Add dummy job we can depend on & Generate ruby matrix dynamically [\#9](https://github.com/OpenVoxProject/openvoxserver-ca/pull/9) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [3.0.0-rc1](https://github.com/openvoxproject/openvoxserver-ca/tree/3.0.0-rc1) (2025-07-09)
 
 [Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/2.7.0...3.0.0-rc1)
