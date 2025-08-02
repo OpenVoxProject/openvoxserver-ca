@@ -13,8 +13,8 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{A simple CLI tool for interacting with OpenVox Server's Certificate Authority}
   spec.homepage      = "https://github.com/OpenVoxProject/openvoxserver-ca/"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+  spec.files         = `git ls-files -z`.split("\x0").select do |f|
+    f.match(%r{^(lib|exe)/|.md$|^LICENSE$})
   end
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
