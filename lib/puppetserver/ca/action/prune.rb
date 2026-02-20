@@ -145,12 +145,13 @@ BANNER
 
           extensions.each do |ext|
             if ext.oid == "crlNumber"
+              next_value = OpenSSL::ASN1::Integer.new(ext.value.to_i + 1)
               if RUBY_ENGINE == "jruby"
-                # Creating a crlNumber extension without an ExtensionFactory produce incorrect result on jruby
-                crl.add_extension(ef.create_extension("crlNumber", ext.value.next))
+                # Creating a crlNumber extension without an ExtensionFactory produces an incorrect result on jruby
+                crl.add_extension(ef.create_extension("crlNumber", next_value))
               else
-                # Creating a crlNumber extension with an ExtensionFactory rais on exception on MRI
-                crl.add_extension(OpenSSL::X509::Extension.new("crlNumber", ext.value.next))
+                # Creating a crlNumber extension with an ExtensionFactory raises an exception on MRI
+                crl.add_extension(OpenSSL::X509::Extension.new("crlNumber", next_value))
               end
             else
               crl.add_extension(ext)

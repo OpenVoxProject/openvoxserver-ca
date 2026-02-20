@@ -421,6 +421,7 @@ RSpec.describe Puppetserver::Ca::Action::Prune do
   end
 
   describe 'update' do
+    DER_INTEGER_TAG = 0x02
     it 'bumps CRL number up by 1' do
       ca_key = OpenSSL::PKey::RSA.new(512)
       ca_cert = create_cert(ca_key, "Bazzup")
@@ -433,9 +434,49 @@ RSpec.describe Puppetserver::Ca::Action::Prune do
 
       subject.update_pruned_CRL(ca_crl, ca_key)
 
-      extensions_after = ca_crl.extensions.select { |ext| ext.oid == "crlNumber"}
-      extensions_after.each do |ext|
-        expect(ext.value.to_i).to eq(1)
+      extensions_after = ca_crl.extensions.find { |ext| ext.oid == "crlNumber" }
+      expect(extensions_after).not_to be_nil
+
+      raw_bytes = OpenSSL::ASN1::decode(extensions_after.to_der)
+        .value[1]   # index 1 is the extnValue OCTET STRING
+        .value      # unwrap the OCTET STRING to get DER bytes
+
+      # The first byte must be 0x02 (DER INTEGER tag)
+      expect(raw_bytes.bytes.first).to eq(DER_INTEGER_TAG),
+                                       "Expected CRL number extension value to be a DER INTEGER (tag #{DER_INTEGER_TAG}) " \
+                                         "but got tag 0x#{raw_bytes.bytes.first.to_s(16)}"
+
+      parsed = OpenSSL::ASN1.decode(raw_bytes)
+      expect(parsed).to be_a(OpenSSL::ASN1::Integer)
+      expect(parsed.value).to eq(OpenSSL::BN.new(1))
+    end
+
+    it 'correctly encodes CRL number as DER INTEGER after multiple prune operations' do
+      number_of_iterations = 3
+      ca_key = OpenSSL::PKey::RSA.new(512)
+      ca_cert = create_cert(ca_key, "Bazzup")
+      revoked_cert = create_cert(ca_key, 'revoked')
+      ca_crl = create_crl(ca_cert, ca_key, Array.new(number_of_iterations, revoked_cert))
+
+      initial_crl_number = OpenSSL::BN.new(
+        ca_crl.extensions.find { |ext| ext.oid == "crlNumber" }.value
+      )
+
+      number_of_iterations.times do |iteration|
+        subject.prune_CRL(ca_crl) if iteration == 0
+        subject.update_pruned_CRL(ca_crl, ca_key)
+
+        crl_number_ext = ca_crl.extensions.find { |ext| ext.oid == "crlNumber" }
+        raw_bytes = OpenSSL::ASN1.decode(crl_number_ext.to_der)
+                                 .value[1]  # index 1 is the extnValue OCTET STRING
+                                 .value     # unwrap the OCTET STRING to get DER bytes
+
+        expect(raw_bytes.bytes.first).to eq(DER_INTEGER_TAG),
+                                         "After #{iteration + 1} update(s), CRL number tag was 0x#{raw_bytes.bytes.first.to_s(16)} " \
+                                           "instead of #{DER_INTEGER_TAG} (DER INTEGER)"
+
+        parsed = OpenSSL::ASN1.decode(raw_bytes)
+        expect(parsed.value).to eq(initial_crl_number + OpenSSL::BN.new(iteration + 1))
       end
     end
   end
