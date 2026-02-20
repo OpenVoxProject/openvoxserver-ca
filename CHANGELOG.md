@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0](https://github.com/openvoxproject/openvoxserver-ca/tree/3.1.0) (2026-02-20)
+
+[Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.0.0...3.1.0)
+
+**Implemented enhancements:**
+
+- Remove duplicate rspec/rake from Gemfile & remove unused pry/bundler dependency [\#24](https://github.com/OpenVoxProject/openvoxserver-ca/pull/24) ([bastelfreak](https://github.com/bastelfreak))
+- Add Ruby 4.0 support [\#22](https://github.com/OpenVoxProject/openvoxserver-ca/pull/22) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+**Fixed bugs:**
+
+- Fix bogus bundler requirement in `puppetserver-ca` [\#23](https://github.com/OpenVoxProject/openvoxserver-ca/pull/23) ([smortex](https://github.com/smortex))
+
 ## [3.0.0](https://github.com/openvoxproject/openvoxserver-ca/tree/3.0.0) (2025-07-10)
 
 [Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.0.0-rc1...3.0.0)
