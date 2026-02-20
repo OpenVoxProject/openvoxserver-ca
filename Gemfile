@@ -7,11 +7,6 @@ gemspec
 
 gem 'hocon', '~> 1.2', require: false
 
-group(:development, optional: true) do
-  gem 'pry'
-  gem 'pry-byebug'
-end
-
 group(:release, optional: true) do
   gem 'faraday-retry', require: false
   gem 'github_changelog_generator', require: false
