@@ -6,13 +6,6 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gemspec
 
 gem 'hocon', '~> 1.2', require: false
-gem 'rake', '~> 13.0', require: false
-gem 'rspec', '~> 3.4', require: false
-
-group(:development, optional: true) do
-  gem 'pry'
-  gem 'pry-byebug'
-end
 
 group(:release, optional: true) do
   gem 'faraday-retry', require: false
