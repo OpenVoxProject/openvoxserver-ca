@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.1](https://github.com/openvoxproject/openvoxserver-ca/tree/3.1.1) (2026-02-21)
+
+[Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.1.0...3.1.1)
+
+**Fixed bugs:**
+
+- fix CRL extension update by using ASN.1 INTEGER [\#26](https://github.com/OpenVoxProject/openvoxserver-ca/pull/26) ([corporate-gadfly](https://github.com/corporate-gadfly))
+
 ## [3.1.0](https://github.com/openvoxproject/openvoxserver-ca/tree/3.1.0) (2026-02-20)
 
 [Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.0.0...3.1.0)
