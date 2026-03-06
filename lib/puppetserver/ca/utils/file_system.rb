@@ -53,14 +53,18 @@ module Puppetserver
         def self.forcibly_symlink(source, link_target)
           FileUtils.remove_dir(link_target, true)
           FileUtils.symlink(source, link_target)
-          # Ensure the symlink has the same ownership as the source.
-          # This requires using `FileUtils.chown` rather than `File.chown`, as
-          # the latter will update the ownership of the source rather than the
-          # link itself.
-          # Symlink permissions are ignored in favor of the source's permissions,
-          # so we don't have to change those.
-          source_info = File.stat(source)
-          FileUtils.chown(source_info.uid, source_info.gid, link_target)
+
+          # Ensure the symlink has the same ownership as the source when running
+          # with privileges to change ownership.
+          if instance.running_as_root?
+            # This requires using `FileUtils.chown` rather than `File.chown`, as
+            # the latter will update the ownership of the source rather than the
+            # link itself.
+            # Symlink permissions are ignored in favor of the source's permissions,
+            # so we don't have to change those.
+            source_info = File.stat(source)
+            FileUtils.chown(source_info.uid, source_info.gid, link_target)
+          end
         end
 
         def initialize
