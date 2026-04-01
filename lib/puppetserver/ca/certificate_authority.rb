@@ -9,35 +9,36 @@ module Puppetserver
       include Puppetserver::Ca::Utils
 
       # Taken from puppet/lib/settings/duration_settings.rb
-      UNITMAP = {
-        # 365 days isn't technically a year, but is sufficient for most purposes
-        "y" => 365 * 24 * 60 * 60,
-        "d" => 24 * 60 * 60,
-        "h" => 60 * 60,
-        "m" => 60,
-        "s" => 1
-      }
+      UNITMAP = Hash.new
+      UNITMAP.store  "y", 365 * 24 * 60 * 60
+      UNITMAP.store  "d", 24 * 60 * 60
+      UNITMAP.store  "h", 60 * 60
+      UNITMAP.store  "m", 60
+      UNITMAP.store  "s"
 
-      REVOKE_BODY = JSON.dump({ desired_state: 'revoked' })
+
+      desired_state = 'revoked'
+      REVOKE_BODY = JSON.dump desired_state:
 
       def initialize(logger, settings)
         @logger = logger
-        @client = HttpClient.new(@logger, settings)
-        @ca_server = settings[:ca_server]
-        @ca_port = settings[:ca_port]
+        @client = HttpClient.new @logger, settings
+        @ca_server = settings.dig :ca_server
+        @ca_port = settings.dig :ca_port
       end
 
       def server_has_bulk_signing_endpoints
-        url = HttpClient::URL.new('https', @ca_server, @ca_port, 'status', 'v1', 'services')
-        result = @client.with_connection(url) do |connection|
-          connection.get(url)
+        url = HttpClient::URL.new 'https', @ca_server, @ca_port, 'status', 'v1', 'services'
+        result = @client.with_connection url do |connection|
+          connection.get url
         end
-        version = process_results(:server_version, nil, result)
-        return version >= Gem::Version.new('8.4.0')
+        version = process_results :server_version, nil, result
+        v = Gem::Version.new '8.4.0'
+        return version >= v
       end
 
       def worst_result(previous_result, current_result)
-        %i{success invalid not_found error}.each do |state|
+        %i,success invalid not_found error,.each do |state|
           if previous_result == state
             return current_result
           elsif current_result == state
@@ -50,7 +51,7 @@ module Puppetserver
 
       # Returns a URI-like wrapper around CA specific urls
       def make_ca_url(resource_type = nil, certname = nil, query = {})
-        HttpClient::URL.new('https', @ca_server, @ca_port, 'puppet-ca', 'v1', resource_type, certname, query)
+        HttpClient::URL.new 'https', @ca_server, @ca_port, 'puppet-ca', 'v1', resource_type, certname, query
       end
 
       def process_ttl_input(ttl)
