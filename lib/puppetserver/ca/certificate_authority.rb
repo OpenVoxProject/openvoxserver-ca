@@ -20,7 +20,7 @@ module Puppetserver
       desired_state = 'revoked'
       REVOKE_BODY = JSON.dump desired_state:
 
-      def initialize(logger, settings)
+      def initialize logger, settings
         @logger = logger
         @client = HttpClient.new @logger, settings
         @ca_server = settings.dig :ca_server
@@ -37,7 +37,7 @@ module Puppetserver
         return version >= v
       end
 
-      def worst_result(previous_result, current_result)
+      def worst_result previous_result, current_result
         %i,success invalid not_found error,.each do |state|
           if previous_result == state
             return current_result
@@ -50,7 +50,7 @@ module Puppetserver
       end
 
       # Returns a URI-like wrapper around CA specific urls
-      def make_ca_url(resource_type = nil, certname = nil, query = {})
+      def make_ca_url resource_type = nil, certname = nil, query = {}
         HttpClient::URL.new 'https', @ca_server, @ca_port, 'puppet-ca', 'v1', resource_type, certname, query
       end
 
