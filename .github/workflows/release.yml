@@ -20,7 +20,6 @@ jobs:
   release:
     uses: OpenVoxProject/shared-actions/.github/workflows/release.yml@main
     with:
-      allowed_owner: 'OpenVoxProject'
       base-branch: ${{ github.event.inputs.base-branch }}
       version: ${{ github.event.inputs.version }}
     secrets:
