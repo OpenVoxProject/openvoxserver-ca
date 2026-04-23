@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.0](https://github.com/openvoxproject/openvoxserver-ca/tree/3.2.0) (2026-04-23)
+
+[Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.1.1...3.2.0)
+
+**Implemented enhancements:**
+
+- fix: skip chown in rootless containers via ensure\_ownership helper [\#33](https://github.com/OpenVoxProject/openvoxserver-ca/pull/33) ([dotconfig404](https://github.com/dotconfig404))
+
 ## [3.1.1](https://github.com/openvoxproject/openvoxserver-ca/tree/3.1.1) (2026-02-21)
 
 [Full Changelog](https://github.com/openvoxproject/openvoxserver-ca/compare/3.1.0...3.1.1)
