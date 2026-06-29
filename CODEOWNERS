@@ -1,4 +1,0 @@
-# This will cause the puppetserver-maintainers group to be assigned
-# review of any opened PRs against the branches containing this file.
-
-* @puppetlabs/dumpling @puppetlabs/skeletor 
